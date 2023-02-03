@@ -3,7 +3,19 @@ const inquirer = require('inquirer')
 require('console.table') 
 
 if (connect) {
-    console.log("Datebase is running")
+    console.log(" ------------------------")
+    console.log("|                        |")
+    console.log("|                        |")
+    console.log("|                        |")
+    console.log("|                        |")
+    console.log("|    Employee Manager    |")
+    console.log("|                        |")
+    console.log("|                        |")
+    console.log("|                        |")
+    console.log("|                        |")
+    console.log("|                        |")
+    console.log(" ------------------------")
+
     startQuestion()
 }
 
