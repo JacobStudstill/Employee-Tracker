@@ -129,7 +129,7 @@ function updateEmployee() {
                     console.log(`Successfully updated ${firstName} ${lastName} to role ID# ${newRole}`);
                 }
             });
-            startQuestion()
+            viewEmployees()
         });
 }
 
@@ -141,7 +141,20 @@ function viewDeparments() {
     startQuestion()
 }
 
-function addDepartment(){
-    console.log('Add department to department table')
-    startQuestion()
-}
+function addDepartment() {
+    inquirer.prompt([
+        {
+        type: 'input',
+        name: 'newDepartment',
+        message: "What is your new department's name?"
+        }
+    ])
+    .then(answer => {
+        console.log(answer);
+        connect.query(`INSERT INTO department (name) VALUES('${answer.newDepartment}')`, (err, data) => {
+            if (err) throw err;
+            console.log(" ")
+            viewDeparments()
+            })
+        })
+    };
