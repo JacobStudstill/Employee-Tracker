@@ -25,24 +25,24 @@ function startQuestion() {
             type: 'list',
             name: 'startQuestion',
             message: "What would you like to do?",
-            choices : ['View Roles', 'Add Role', 'Update Employee Role', 'View Employees', 'Add Employee', 'View Departments', 'Add Department', 'Quit']
+            choices : ['View Employees','Add Employee', 'Update Employee Role', 'View Roles', 'Add Role', 'View Departments', 'Add Department', 'Quit']
         }
     ]).then(answer => {
         switch (answer.startQuestion) {
+            case 'View Employees':
+                viewEmployees()
+                break;
+            case 'Add Employee':
+                addEmployee()
+                break;
+            case 'Update Employee Role':
+                updateEmployee()
+                break;
             case 'View Roles':
                 viewRoles()
                 break;
             case 'Add Role':
                 addRole()
-                break;
-            case 'View Employees':
-                viewEmployees()
-                break;
-            case 'Update Employee Role':
-                updateEmployee()
-                break;
-            case 'Add Employee':
-                addEmployee()
                 break;    
             case 'View Departments':
                 viewDeparments()
@@ -105,9 +105,45 @@ function viewEmployees() {
     startQuestion()
 }
 
-function addEmployee(){
-    console.log('Add employee to employee table')
-    startQuestion()
+function addEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'firstName',
+                message: 'Enter the first name of the employee you want to add:'
+            },
+            {
+                type: 'input',
+                name: 'lastName',
+                message: 'Enter the last name of the employee you want to add:'
+            },
+            {
+                type: 'input',
+                name: 'Role',
+                message: 'Enter the new Employee role:'
+            },
+            {
+                type: 'input',
+                name: 'Manager',
+                message: 'Enter the manager: (Press Enter if Employee is a manager)',
+                default: "NULL"
+            },
+        ])
+        .then(answers => {
+            const { firstName, lastName, Role, Manager } = answers;
+
+            let updateStatement = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${Role}, ${Manager})`;
+
+            connect.query(updateStatement, (error, results) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(`${firstName} ${lastName} was added with the role ID# ${Role}`);
+                }
+            });
+            viewEmployees()
+        });
 }
 
 function updateEmployee() {
