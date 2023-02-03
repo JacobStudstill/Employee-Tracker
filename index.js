@@ -13,7 +13,7 @@ function startQuestion() {
             type: 'list',
             name: 'startQuestion',
             message: "What would you like to do?",
-            choices : ['View Roles', 'Add Role', 'View Employees', 'Add Employee', 'View Departments', 'Add Department', 'Quit']
+            choices : ['View Roles', 'Add Role', 'Update Employee Role', 'View Employees', 'Add Employee', 'View Departments', 'Add Department', 'Quit']
         }
     ]).then(answer => {
         switch (answer.startQuestion) {
@@ -25,6 +25,9 @@ function startQuestion() {
                 break;
             case 'View Employees':
                 viewEmployees()
+                break;
+            case 'Update Employee Role':
+                updateEmployee()
                 break;
             case 'Add Employee':
                 addEmployee()
@@ -93,6 +96,41 @@ function viewEmployees() {
 function addEmployee(){
     console.log('Add employee to employee table')
     startQuestion()
+}
+
+function updateEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'firstName',
+                message: 'Enter the first name of the employee you want to update:'
+            },
+            {
+                type: 'input',
+                name: 'lastName',
+                message: 'Enter the last name of the employee you want to update:'
+            },
+            {
+                type: 'input',
+                name: 'newRole',
+                message: 'Enter the new employee role:'
+            },
+        ])
+        .then(answers => {
+            const { firstName, lastName, newRole } = answers;
+
+            let updateRole = `UPDATE employee SET role_id = '${newRole}' WHERE first_name = '${firstName}' AND last_name = '${lastName}'`;
+
+            connect.query(updateRole, (error, results) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(`Successfully updated ${firstName} ${lastName} to role ID# ${newRole}`);
+                }
+            });
+            startQuestion()
+        });
 }
 
 function viewDeparments() {
