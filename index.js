@@ -34,7 +34,11 @@ function startQuestion() {
 
 function viewAll() {
     console.log('view all tables in a join')
-
+    connect.query("SELECT role.title, role.salary, department.name FROM role JOIN department ON role.department_id = department.id", (err,data) => {
+        if(err) throw err;
+        console.log('')
+        console.table(data)
+    })
     startQuestion()
 }
 
